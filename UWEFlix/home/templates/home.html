@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>UWEFlix</title>
+</head>
+
+<body>
+<div class="navbar">
+
+</div>
+
+<div class="body-content">
+<h1> UWEFlix </h1>
+{% for film in films %}
+  <a> 
+    <p> {{ film.title }} </p> 
+  </a>
+{% endfor %}
+</div>
+</body>
+</html>
