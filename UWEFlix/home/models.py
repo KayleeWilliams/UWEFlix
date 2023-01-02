@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class Film(models.Model):
     title = models.CharField(max_length=255)
+    imdb = models.TextField()
     description = models.TextField()
     duration = models.PositiveIntegerField()
     age_rating = models.PositiveIntegerField()

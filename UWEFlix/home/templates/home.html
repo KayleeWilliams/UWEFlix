@@ -1,22 +1,88 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>UWEFlix</title>
-</head>
+{% extends "template.html" %}
+{% block title %}
+  UWEFlix
+{% endblock %}
 
-<body>
-<div class="navbar">
+{% block content %}
+<div class="">
+  <h1> UWEFlix </h1>
 
+  <!-- Modal for showings + film details -->
+  <div id="filmModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <div class="modal-details">
+        <h2 id="modalTitle"></h2>
+
+        <div class="modal-grid">
+          <p id="modalDescription" class="col-3-4"></p>
+          <div class="col-1-4">
+            <div>
+              <p> Age Rating </p>
+              <p id="modalRating"></p>
+            </div>
+            <div>
+              <p> Duration </p>
+              <p id="modalDuration"></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="film-list">
+    {% for film in films %}
+      <a class="film-container film-modal" data-title="{{ film.title }}" 
+      data-description="{{ film.description }}" data-rating="{{ film.age_rating }}+"
+      data-duration="{{ film.duration }} mins"> 
+        <img src="{{ film.image_url }}" alt="{{ film.title }}" class="film-poster">
+        <!-- <p> {{ film.title }} </p>  -->
+      </a>
+    {% endfor %}
+  </div>
 </div>
 
-<div class="body-content">
-<h1> UWEFlix </h1>
-{% for film in films %}
-  <a> 
-    <p> {{ film.title }} </p> 
-  </a>
-{% endfor %}
-</div>
-</body>
-</html>
+<script>
+  // Get the modal element, buttons and closing button
+  var modal = document.getElementById("filmModal");
+  var films = document.getElementsByClassName("film-modal");
+  var span = document.getElementsByClassName("modal-close")[0];
+
+  // For each film add an event listener 
+  for (var i = 0; i < films.length; i++) {
+    films[i].addEventListener("click", function(event) {
+      event.preventDefault();
+
+      // Get the data attributes
+      var title = this.getAttribute("data-title");
+      var description = this.getAttribute("data-description");
+      var ageRating = this.getAttribute("data-rating");
+      var duration = this.getAttribute("data-duration");
+
+      // Set content to the data attributes
+      document.getElementById("modalTitle").innerHTML = title;
+      document.getElementById("modalDescription").innerHTML = description;
+      document.getElementById("modalRating").innerHTML = ageRating;
+      document.getElementById("modalDuration").innerHTML = duration;
+
+      // Display modal
+      modal.style.display = "block";
+    });
+  }
+
+  // If the user clicks outside the modal close it 
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+  // When the user clicks on the span close modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+</script>
+
+{% endblock %}
