@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from home.models import Film, Showing
 import requests
+import json
 
 # Create your views here.
 def home(request):
@@ -20,8 +21,38 @@ def home(request):
     for category in data.keys():
       if len(data[category]) > 0:
         film.image_url = f"https://image.tmdb.org/t/p/original{data[category][0]['poster_path']}"
+        film.save()
 
-  return render(request, 'home.html', {'films': films})
+    # Serialize films
+    serialized_films = [film_serializable(film) for film in films]
+    context = {
+        'films': serialized_films,
+    }
+
+  return render(request, 'home.html', context)
+
+
+def film_serializable(film):
+  # Serialize the showings
+  serialized_showings = [showing_serializable(showing) for showing in film.showings.all()]
+
+  return {
+      'title': film.title,
+      'description': film.description,
+      'duration': film.duration,
+      'age_rating': film.age_rating,
+      'image_url': film.image_url,
+      'showings': serialized_showings,
+  }
+
+
+def showing_serializable(showing):
+  return {
+      'date': showing.date.strftime('%Y-%m-%d'),
+      'time': showing.time.strftime('%H:%M'),
+      'seats': showing.seats
+  }
+
 
 def makeExamples(): 
   Film.objects.all().delete()
@@ -37,6 +68,8 @@ def makeExamples():
       Showing(film=film, date='2022-01-02', time='16:00', seats=80, screen=2),
       Showing(film=film, date='2022-01-02', time='18:00', seats=20, screen=1),
   ]
+
+  Showing.objects.bulk_create(showings)
 
   film = Film(title="Strange World", description="The original action-adventure journeys deep into an uncharted and treacherous land where fantastical creatures await the legendary Clades, a family of explorers whose differences threaten to topple their latest - and by far - most crucial mission.",
               duration=102, age_rating=12, imdb="tt10298840")

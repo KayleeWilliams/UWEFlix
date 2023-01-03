@@ -7,6 +7,7 @@ class Film(models.Model):
     description = models.TextField()
     duration = models.PositiveIntegerField()
     age_rating = models.PositiveIntegerField()
+    image_url = models.URLField(blank=True, null=True)
 
 # Cascade (On film deletion, delete all related showings)
 class Showing(models.Model):
