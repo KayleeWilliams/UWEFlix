@@ -6,25 +6,38 @@
 
 {% block content %}
 <div>
-  <h1> UWEFlix Booking </h1>
-  <form method="post" class="booking-form">
-      {% csrf_token %}
-      {% for field in form %}
-        {% if field.name|slice:":6" == "ticket" %}    
-          <div class="ticket-row"> 
-            <p> {{ field.label }} Ticket </p>
+  <image src="{{ showing.film.backdrop_url }}" class="action-image" />
+  <div class="booking-action">
+    <form method="post" class="booking-form">
+      {% csrf_token %} <!-- This is a security token to prevent cross-site request forgery (CSRF) attacks  -->
+        {% for field in form %}
+          {% if field.name|slice:":6" == "ticket" %}    
+            <div class="ticket-row"> 
+              <p> {{ field.label }} Ticket </p>
+              {{ field }}
+            </div>
+          {% else %} 
+            {{ field.label }} <br/>
             {{ field }}
-          </div>
-        {% else %} 
-            {{ field.label }}: {{ field }}
             <br />
-        {% endif %}
-      {% endfor %}
+          {% endif %}
+        {% endfor %}
+
+      {% if form.non_field_errors %}
+        <div class="errors">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
       <div class="checkout"> 
         <input type="submit" value="Book Tickets">
         <div id="total_cost">Total: £0.00</div>
       </div>
-  </form> 
+    </form>
+    
+  </div>
 </div>
 
 <script>

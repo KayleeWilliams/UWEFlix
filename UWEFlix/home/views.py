@@ -20,7 +20,21 @@ def booking(request):
     form = BookingForm(request.POST, available_tickets=Ticket.objects.all())
 
     if form.is_valid():
-      # booking = form.save(commit=False)
+      # Further validation 
+      # Check if there are enough seats + Seats > 0
+      total_tickets = 0
+      for field_name, quantity in form.cleaned_data.items():
+          if field_name.startswith('ticket_'):
+              total_tickets += quantity
+
+      if total_tickets > showing.seats:
+          form.add_error(None, 'Not enough seats available.')
+          return render(request, 'booking.html', {'form': form, 'showing': showing})
+
+      elif total_tickets == 0:
+          form.add_error(None, 'You must select at least one ticket.')
+          return render(request, 'booking.html', {'form': form, 'showing': showing})
+
       booking = Booking.objects.create(
           showing=showing,
           customer_name=form.cleaned_data['customer_name'],
@@ -34,11 +48,12 @@ def booking(request):
               ticket = Ticket.objects.get(id=ticket_id)
               ttq = TicketTypeQuantity.objects.create(ticket=ticket, quantity=quantity)
               booking.ticket_type_quantities.add(ttq)
+
+      # Update showing seats & save booking
+      showing.seats -= total_tickets
+      showing.save()
       booking.save()
       return render(request, 'booking-confirmation.html', {'booking': booking})
-      # Print all boookings
-      bookings = Booking.objects.all()
-      print(bookings)
     else:
         form = BookingForm(available_tickets=Ticket.objects.all())
     return render(request, 'booking.html', {'form': form, 'showing': showing})
@@ -99,9 +114,11 @@ def showing_serializable(showing):
 
 
 def makeExamples(): 
+  # Delete all data before making new
   Film.objects.all().delete()
   Showing.objects.all().delete()
   Ticket.objects.all().delete()
+  Booking.objects.all().delete()
 
   # Create tickets
   tickets = [
@@ -119,9 +136,9 @@ def makeExamples():
 
   # Create list of showings
   showings = [
-      Showing(film=film, date='2022-01-01', time='20:00', seats=60, screen=1),
-      Showing(film=film, date='2022-01-02', time='16:00', seats=80, screen=2),
-      Showing(film=film, date='2022-01-02', time='18:00', seats=20, screen=1),
+      Showing(film=film, date='2023-01-01', time='20:00', seats=60, screen=1),
+      Showing(film=film, date='2023-01-02', time='16:00', seats=80, screen=2),
+      Showing(film=film, date='2023-01-02', time='18:00', seats=20, screen=1),
   ]
 
   Showing.objects.bulk_create(showings)
@@ -132,9 +149,73 @@ def makeExamples():
 
   # Create list of showings
   showings = [
-      Showing(film=film, date='2022-01-01', time='20:00', seats=100, screen=1),
-      Showing(film=film, date='2022-01-01', time='21:00', seats=90, screen=2),
+      Showing(film=film, date='2023-01-01', time='20:00', seats=100, screen=1),
+      Showing(film=film, date='2023-01-01', time='21:00', seats=90, screen=2),
   ]
 
   Showing.objects.bulk_create(showings)
   
+  film = Film(title="Glass Onion: A Knives Out Mystery", description="Tech billionaire Miles Bron invites his friends for a getaway on his private Greek island. When someone turns up dead, Detective Benoit Blanc is put on the case.",
+              duration=139, age_rating=12, imdb="tt11564570")
+  film.save()
+
+  showings = [
+      Showing(film=film, date='2023-01-05', time='09:00', seats=100, screen=1),
+      Showing(film=film, date='2023-01-05', time='12:00', seats=100, screen=1),
+  ]
+  Showing.objects.bulk_create(showings)
+
+  film = Film(title="John Wick: Chapter 4", description="John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.",
+              duration=200, age_rating=14, imdb="tt10366206")
+  film.save()
+
+  showings = [
+      Showing(film=film, date='2023-01-05', time='10:00', seats=50, screen=3),
+  ]
+  Showing.objects.bulk_create(showings)
+
+  film = Film(title="Top Gun: Maverick", description="After thirty years, Maverick is still pushing the envelope as a top naval aviator, but must confront ghosts of his past when he leads TOP GUN's elite graduates on a mission that demands the ultimate sacrifice from those chosen to fly it.",
+              duration=130, age_rating=12, imdb="tt1745960")
+  film.save()
+
+  showings = [
+      Showing(film=film, date='2023-01-05', time='16:00', seats=20, screen=20),
+      Showing(film=film, date='2023-01-06', time='16:00', seats=20, screen=20),
+      Showing(film=film, date='2023-01-07', time='16:00', seats=50, screen=20),
+
+
+  ]
+  Showing.objects.bulk_create(showings)
+
+  film = Film(title="The Batman", description="When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
+              duration=176, age_rating=15, imdb="tt1877830")
+  film.save()
+
+  showings = [
+      Showing(film=film, date='2023-01-06', time='20:00', seats=60, screen=1),
+      Showing(film=film, date='2023-01-07', time='16:00', seats=80, screen=2),
+      Showing(film=film, date='2023-01-07', time='18:00', seats=20, screen=1),
+
+
+  ]
+  Showing.objects.bulk_create(showings)
+
+  film = Film(title="Arcane", description="Set in utopian Piltover and the oppressed underground of Zaun, the story follows the origins of two iconic League champions-and the power that will tear them apart.",
+              duration=360, age_rating=15, imdb="tt11126994")
+  film.save()
+
+  showings = [
+      Showing(film=film, date='2023-01-12', time='20:00', seats=60, screen=1),
+      Showing(film=film, date='2023-01-12', time='16:00', seats=80, screen=2),
+  ]
+  Showing.objects.bulk_create(showings)
+
+  film = Film(title="Wednesday", description="Follows Wednesday Addams' years as a student, when she attempts to master her emerging psychic ability, thwart and solve the mystery that embroiled her parents.",
+              duration=360, age_rating=12, imdb="tt13443470")
+  film.save()
+
+  showings = [
+      Showing(film=film, date='2023-01-13', time='10:00', seats=60, screen=1),
+      Showing(film=film, date='2023-01-13', time='14:00', seats=80, screen=2),
+  ]
+  Showing.objects.bulk_create(showings)
