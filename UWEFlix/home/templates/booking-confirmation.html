@@ -1,0 +1,20 @@
+{% extends "template.html" %}
+
+{% block title %}
+  UWEFlix
+{% endblock %}
+
+{% block content %}
+<div>
+  <image src="{{ booking.showing.film.backdrop_url }}" class="action-image" />
+  <div class="booking-action"> 
+    <div class="confirmation">
+      <h1> Booking Confirmation </h1>
+      <h3> Your booking reference is: {{ booking.id }} </h3>
+      <p> Keep note of this number in case you need to amend or cancel your booking.</p>
+      <a href="/"> Home </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

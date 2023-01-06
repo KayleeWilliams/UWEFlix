@@ -8,7 +8,7 @@ body {
 .film-list {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-gap: 1em;er;
+  grid-gap: 1em;
 }
 
 .film-container {
@@ -90,13 +90,6 @@ body {
   margin: 0;
 }
 
-.modal-showings a {
-  background-color: rgb(61, 42, 42);
-  color: white;
-  padding: 0.5em;
-  border-radius: 4px;
-}
-
 .showing-date {
   display: flex;
   flex-direction: row;
@@ -109,4 +102,137 @@ body {
   display: flex;
   flex-direction: row;
   gap: 1em;
+}
+
+.showing-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2em;
+  width: 4em;
+  background-color: #900e21;
+  border-radius: 4px;
+  text-decoration: none;
+  color: white;
+}
+
+.booking-form {
+  width: 30%;
+  background-color: #222327;
+  padding: 2em 1em;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  font-size: 16px;
+
+
+}
+.booking-form p {
+  margin: 0;
+}
+
+.booking-form .ticket-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: medium;
+  margin-bottom: 8px;
+}
+
+.booking-form .ticket-row input {
+  width: 14%;
+  background-color: #2c2e32;
+	padding: 4px;
+  color: white;
+  text-size: 16px;
+	border: none;
+	border-radius: 2px;
+	outline: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.booking-form input {
+  background-color: #2c2e32;
+  padding: 4px;
+  color: white;
+	border-radius: 4px;
+  border: none;
+	outline: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.booking-form .checkout {
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+  align-items: center;
+  font-size: 18px;
+}
+
+
+.booking-form .checkout input {
+  height: 2em;
+  padding: 0 1em;
+  background-color: #900e21;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+
+.booking-action {
+  width: 100%; 
+  height: 100%;
+  position: fixed; /* Stay in place */
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.booking-action h1, h2, h3 {
+  margin: 0;
+}
+
+.booking-action .confirmation {
+  background-color: #222327;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 2em 1em;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  font-size: 18px;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1em;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.booking-action .confirmation a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.action-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

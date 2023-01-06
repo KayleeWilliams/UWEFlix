@@ -104,7 +104,14 @@
         let showingsDiv = document.createElement("div");
         for (let showing of showingsForDate) {
           let showingTime = document.createElement("a");
-          showingTime.innerHTML = `${showing.time}`;
+          // Add href to the booking page
+          showingTime.href = `/booking?showing=${showing.id}`; 
+          
+          // Add the showing to the showingTime element
+          let showingTimeText = document.createElement("p");
+          showingTimeText.innerHTML = `${showing.time}`;
+          showingTime.appendChild(showingTimeText);
+          showingTime.classList.add("showing-time");
           showingsDiv.appendChild(showingTime);
         }
         showingsDiv.classList.add("showing-times");
@@ -114,7 +121,6 @@
         modalShowings.appendChild(dateDiv);
       }
 
-      
       // Display modal
       modal.style.display = "block";
     });
