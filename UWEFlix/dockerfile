@@ -1,0 +1,14 @@
+FROM python:3.9.2
+
+# Set the working directory
+WORKDIR /UWEFlix
+
+# Copy the requirements to the working directory & install them
+COPY requirements.txt /UWEFlix/requirements.txt
+RUN pip install -r /UWEFlix/requirements.txt
+
+# Copy the rest of the files to the working directory
+COPY . /UWEFlix
+
+# Run Django dev server
+CMD python manage.py runserver 0:8000
